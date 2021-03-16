@@ -34,7 +34,7 @@ public class GridNode : MonoBehaviour
 
         var neighboringGridNode = colliders[0].GetComponentInParent<GridNode>();
 
-        if (neighboringGridNode == this)
+        if (neighboringGridNode == null || neighboringGridNode == this)
             return;
 
         if (!neighboringGridNode.neighboringGridNodes.Contains(this))
