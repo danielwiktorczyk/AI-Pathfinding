@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
 public class GridTileGenerator : MonoBehaviour
@@ -16,17 +17,31 @@ public class GridTileGenerator : MonoBehaviour
 
     private void GenerateGridTiles()
     {
+        var tiles = new List<GridNode>();
+
         for (var i = 0; i < this.length; ++i)
-            for (var j = 0; j < this.width; j++)
-                PlaceGridTile(i, j);
+            for (var j = 0; j < this.width; ++j)
+                tiles.Add(PlaceGridTile(i, j));
+
+        tiles.ForEach(gridNode => gridNode.DrawNeighboringConnections());
     }
 
-    private void PlaceGridTile(int i, int j)
+    private GridNode PlaceGridTile(int i, int j)
     {
-        var gridTile = Instantiate(this.gridTilePrefab, this.transform);
-        gridTile.transform.position = new Vector3(
-            i - this.length / 2,
+        var gridTilePosition = new Vector3(
+            j - this.width / 2,
             0,
-            j - this.width / 2);
+            i - this.length / 2);
+        var gridTile = Instantiate(this.gridTilePrefab,
+            gridTilePosition,
+            Quaternion.identity,
+            this.transform);
+
+        var gridNode = gridTile.GetComponent<GridNode>();
+        gridNode.SetNeighboringGridNodes();
+
+        gridTile.name = $"Tile ({gridTilePosition.x}, {gridTilePosition.z})";
+
+        return gridNode;
     }
 }

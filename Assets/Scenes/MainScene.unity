@@ -656,8 +656,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67234bcbf00ef6049bdca745c382e7ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length: 60
-  width: 50
+  length: 50
+  width: 60
   gridTilePrefab: {fileID: 2330677461486026086, guid: d84526f788191544482ce1cae8b853d1, type: 3}
 --- !u!4 &349606857
 Transform:
