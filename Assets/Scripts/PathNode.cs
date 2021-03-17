@@ -9,6 +9,7 @@ public abstract class PathNode : MonoBehaviour
 
     [SerializeField] protected Material normalCenterMat;
     [SerializeField] protected Material highlightedCenterMat;
+    [SerializeField] protected Material obstructedCenterMat;
 
     public abstract void Highlight();
 

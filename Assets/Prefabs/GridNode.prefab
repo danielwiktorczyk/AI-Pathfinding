@@ -105,6 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 333058034661156466}
   - component: {fileID: 5193802742441426818}
+  - component: {fileID: 2434999614052645274}
   m_Layer: 0
   m_Name: GridNode
   m_TagString: Untagged
@@ -144,7 +145,21 @@ MonoBehaviour:
   lineMat: {fileID: 2100000, guid: 55e1838b07b0f0b4b916c4c6f7de7f43, type: 2}
   normalCenterMat: {fileID: 2100000, guid: 7402d6fdd5dc0244b82bd94c471e9ea9, type: 2}
   highlightedCenterMat: {fileID: 2100000, guid: e0ef315ca97570f46a8af5a0591b70ba, type: 2}
+  obstructedCenterMat: {fileID: 2100000, guid: a5c1bd1e0fe9d8945a8c288d5f32f923, type: 2}
   centerNode: {fileID: 1253161793601187500}
+--- !u!65 &2434999614052645274
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2330677461486026086}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.97, y: 0.17411509, z: 0.97}
+  m_Center: {x: 0, y: -0.0025949888, z: 0}
 --- !u!1 &8394331883133448891
 GameObject:
   m_ObjectHideFlags: 0

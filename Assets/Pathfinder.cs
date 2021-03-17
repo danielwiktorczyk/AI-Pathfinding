@@ -41,7 +41,7 @@ public class Pathfinder : MonoBehaviour
 
     private IEnumerator FindPath()
     {
-        yield return new WaitForSeconds(3); // Let everything initialize
+        yield return new WaitForSeconds(0.25f); // Let everything initialize
 
         PathNode currentNode = this.startingNode;
         NodeEntry currentEntry = new NodeEntry
@@ -57,7 +57,7 @@ public class Pathfinder : MonoBehaviour
             currentEntry
         };
         List<NodeEntry> closedList = new List<NodeEntry>();
-        var maxIterations = 100000; // let's make sure we don't enter an endless loop....
+        var maxIterations = 1000; // let's make sure we don't enter an endless loop....
         var currentIteration = 0;
 
         while (openList.Count > 0 && currentIteration < maxIterations)
@@ -111,9 +111,19 @@ public class Pathfinder : MonoBehaviour
             openList = openList.OrderBy(node => node.CostSoFar).ToList();
 
             ++currentIteration;
+
+            if (currentIteration % 1000 == 0)
+                Debug.Log($"Still processing path! Closed list now at length {closedList.Count()}");
         }
 
-        var goalEntry = closedList.Where(node => node.PathNode == goalNode).First();
+        var goalEntries = closedList.Where(node => node.PathNode == goalNode);
+        if (goalEntries.Count() == 0)
+        {
+            Debug.Log("Goal state not reached");
+            yield break;
+        }
+
+        var goalEntry = goalEntries.First();
         if (goalEntry != null)
         {
             Debug.Log("Goal Found!");

@@ -1,11 +1,19 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class GridNode : PathNode
 {
     [SerializeField] private GameObject centerNode;
+
+    private static List<GameObject> obstacles;
+
+    private void Awake()
+    {
+        obstacles = GameObject.FindGameObjectsWithTag("Obstacle").ToList();
+    }
 
     public void SetNeighboringGridNodes()
     {
@@ -32,7 +40,9 @@ public class GridNode : PathNode
 
         var neighboringGridNode = colliders[0].GetComponentInParent<GridNode>();
 
-        if (neighboringGridNode == null || neighboringGridNode == this)
+        if (neighboringGridNode == null 
+            || neighboringGridNode == this
+            || neighboringGridNode.IsObstructed())
             return;
 
         if (!neighboringGridNode.neighboringNodes.Contains(this))
@@ -44,11 +54,34 @@ public class GridNode : PathNode
 
     public override void Highlight()
     {
-        this.centerNode.GetComponent<MeshRenderer>().material = highlightedCenterMat;
+        this.centerNode.GetComponent<MeshRenderer>().material = this.highlightedCenterMat;
     }
 
     public override void RevertHighlighting()
     {
-        this.centerNode.GetComponent<MeshRenderer>().material = normalCenterMat;
+        this.centerNode.GetComponent<MeshRenderer>().material = this.normalCenterMat;
+    }
+
+    public bool IsObstructed()
+    {
+        foreach (var obstacle in obstacles)
+        {
+            var collider = obstacle.GetComponent<Collider>();
+            var closestPoint = collider.ClosestPoint(transform.position);
+
+            if ((closestPoint - transform.position).magnitude <= 0.5f)
+            {
+                //Debug.Log($"Obstructed {transform.name}");
+
+                this.centerNode.GetComponent<MeshRenderer>().material = this.obstructedCenterMat;
+
+                foreach (var node in this.neighboringNodes)
+                    node.neighboringNodes.Remove(this);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }
