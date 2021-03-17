@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 
+// DISABLE THIS in the manager if the tile already exist!!
 public class GridTileGenerator : MonoBehaviour
 {
     [SerializeField] private float length;
@@ -12,7 +9,6 @@ public class GridTileGenerator : MonoBehaviour
 
     [SerializeField] private GameObject gridTilePrefab;
 
-    // Start is called before the first frame update
     void Start() => GenerateGridTiles();
 
     private void GenerateGridTiles()
