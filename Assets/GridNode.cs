@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridNode : MonoBehaviour
+public class GridNode : PathNode
 {
-    public List<GridNode> neighboringGridNodes;
-
-    [SerializeField] private Material lineMat;
+    [SerializeField] private GameObject centerNode;
 
     public void SetNeighboringGridNodes()
     {
@@ -37,35 +35,20 @@ public class GridNode : MonoBehaviour
         if (neighboringGridNode == null || neighboringGridNode == this)
             return;
 
-        if (!neighboringGridNode.neighboringGridNodes.Contains(this))
-            neighboringGridNode.neighboringGridNodes.Add(this);
+        if (!neighboringGridNode.neighboringNodes.Contains(this))
+            neighboringGridNode.neighboringNodes.Add(this);
         
-        if(!this.neighboringGridNodes.Contains(neighboringGridNode))
-            this.neighboringGridNodes.Add(neighboringGridNode);
+        if(!this.neighboringNodes.Contains(neighboringGridNode))
+            this.neighboringNodes.Add(neighboringGridNode);
     }
 
-    public void DrawNeighboringConnections()
+    public override void Highlight()
     {
-        foreach (var node in this.neighboringGridNodes)
-            DrawNeighboringConnection(node);
+        this.centerNode.GetComponent<MeshRenderer>().material = highlightedCenterMat;
     }
 
-    private void DrawNeighboringConnection(GridNode node)
+    public override void RevertHighlighting()
     {
-        var line = new GameObject();
-        line.transform.parent = transform;
-
-        line.AddComponent<LineRenderer>();
-        var lineRenderer = line.GetComponent<LineRenderer>();
-        lineRenderer.material = this.lineMat;
-        
-        lineRenderer.startColor = Color.red;
-        lineRenderer.endColor = Color.red;
-
-        lineRenderer.startWidth = .15f;
-        lineRenderer.endWidth = .15f;
-        
-        lineRenderer.SetPosition(0, transform.position);
-        lineRenderer.SetPosition(1, node.transform.position);
+        this.centerNode.GetComponent<MeshRenderer>().material = normalCenterMat;
     }
 }

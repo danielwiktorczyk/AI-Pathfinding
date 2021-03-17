@@ -140,8 +140,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a0b7cada0ba3c54f99526de9eb85ef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  neighboringGridNodes: []
+  neighboringNodes: []
   lineMat: {fileID: 2100000, guid: 55e1838b07b0f0b4b916c4c6f7de7f43, type: 2}
+  normalCenterMat: {fileID: 2100000, guid: 7402d6fdd5dc0244b82bd94c471e9ea9, type: 2}
+  highlightedCenterMat: {fileID: 2100000, guid: e0ef315ca97570f46a8af5a0591b70ba, type: 2}
+  centerNode: {fileID: 1253161793601187500}
 --- !u!1 &8394331883133448891
 GameObject:
   m_ObjectHideFlags: 0
