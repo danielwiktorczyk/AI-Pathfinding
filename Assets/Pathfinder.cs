@@ -26,14 +26,29 @@ public class Pathfinder : MonoBehaviour
     [SerializeField] private PathNode startingNode;
     [SerializeField] private PathNode goalNode;
 
+    [SerializeField] private bool usingEuclideanHeristic;
+
     private void Start()
     {
+
+
         if (this.pathNode == PathMode.NormalNodes)
         {
             var normalNodesInScene = GameObject.FindObjectsOfType<GridNode>();
 
             this.startingNode = normalNodesInScene[Random.Range(0, normalNodesInScene.Length)];
+            while (startingNode.GetComponent<GridNode>().IsObstructed())
+            {
+                Debug.Log("Obstructed!");
+                this.startingNode = normalNodesInScene[Random.Range(0, normalNodesInScene.Length)];
+            }
+
             this.goalNode = normalNodesInScene[Random.Range(0, normalNodesInScene.Length)];
+            while (goalNode.GetComponent<GridNode>().IsObstructed())
+            {
+                Debug.Log("Obstructed!");
+                this.goalNode = normalNodesInScene[Random.Range(0, normalNodesInScene.Length)];
+            }
         }
 
         StartCoroutine(FindPath());
@@ -49,7 +64,7 @@ public class Pathfinder : MonoBehaviour
             PathNode = currentNode,
             Connection = null,
             CostSoFar = 0,
-            EstimatedTotalCost = 0 // TODO
+            EstimatedTotalCost = usingEuclideanHeristic ? Vector3.Distance(goalNode.transform.position, currentNode.transform.position) : 0
         };
 
         List<NodeEntry> openList = new List<NodeEntry>
@@ -57,7 +72,7 @@ public class Pathfinder : MonoBehaviour
             currentEntry
         };
         List<NodeEntry> closedList = new List<NodeEntry>();
-        var maxIterations = 1000; // let's make sure we don't enter an endless loop....
+        var maxIterations = 100000; // let's make sure we don't enter an endless loop....
         var currentIteration = 0;
 
         while (openList.Count > 0 && currentIteration < maxIterations)
@@ -69,16 +84,24 @@ public class Pathfinder : MonoBehaviour
             openList.Remove(currentEntry);
             currentNode = currentEntry.PathNode;
 
+            if (usingEuclideanHeristic && currentNode == goalNode)
+                break;
+
+
             //Debug.Log($"Current Node: {currentEntry.PathNode.name}");
 
             foreach (var neighboringNode in currentNode.neighboringNodes)
             {
+                if (neighboringNode == null)
+                    continue;
+
+                var costSoFar = currentEntry.CostSoFar + Vector3.Distance(currentNode.transform.position, neighboringNode.transform.position);
                 var neighboringEntry = new NodeEntry
                 {
                     PathNode = neighboringNode,
                     Connection = currentEntry,
-                    CostSoFar = currentEntry.CostSoFar + Vector3.Distance(currentNode.transform.position, neighboringNode.transform.position),
-                    EstimatedTotalCost = 0 // TODO
+                    CostSoFar = costSoFar,
+                    EstimatedTotalCost = usingEuclideanHeristic ? costSoFar + Vector3.Distance(goalNode.transform.position, neighboringNode.transform.position) : costSoFar
                 };
 
                 //Debug.Log($"Neighbor: {neighboringEntry.PathNode.name}");
@@ -108,7 +131,7 @@ public class Pathfinder : MonoBehaviour
             }
 
             openList = openList.Distinct().ToList();
-            openList = openList.OrderBy(node => node.CostSoFar).ToList();
+            openList = openList.OrderBy(node => node.EstimatedTotalCost).ToList();
 
             ++currentIteration;
 

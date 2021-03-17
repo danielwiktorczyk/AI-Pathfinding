@@ -656,7 +656,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75067f05933879d46b21be22c26ac202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pathNode: 0
+  pathNode: 1
   startingNode: {fileID: 1671268359}
   goalNode: {fileID: 1762149920}
 --- !u!4 &349455839
