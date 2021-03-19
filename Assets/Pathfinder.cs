@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,13 @@ public class NodeEntry
 
 public class Pathfinder : MonoBehaviour
 {
-    [SerializeField] private PathMode pathNode;
+    [SerializeField] private PathMode pathMode;
 
-    [SerializeField] private PathNode startingNode;
-    [SerializeField] private PathNode goalNode;
+    [SerializeField] private Transform startingFlag;
+    [SerializeField] private Transform goalFlag;
+
+    private PathNode startingNode;
+    private PathNode goalNode;
 
     [SerializeField] private bool usingEuclideanHeristic;
     
@@ -34,33 +38,48 @@ public class Pathfinder : MonoBehaviour
 
     private void Start()
     {
-
-
-        if (this.pathNode == PathMode.NormalNodes)
-        {
-            var normalNodesInScene = GameObject.FindObjectsOfType<GridNode>();
-
-            this.startingNode = normalNodesInScene[Random.Range(0, normalNodesInScene.Length)];
-            while (startingNode.GetComponent<GridNode>().IsObstructed())
-            {
-                Debug.Log("Obstructed!");
-                this.startingNode = normalNodesInScene[Random.Range(0, normalNodesInScene.Length)];
-            }
-
-            this.goalNode = normalNodesInScene[Random.Range(0, normalNodesInScene.Length)];
-            while (goalNode.GetComponent<GridNode>().IsObstructed())
-            {
-                Debug.Log("Obstructed!");
-                this.goalNode = normalNodesInScene[Random.Range(0, normalNodesInScene.Length)];
-            }
-        }
+        this.startingNode = GetClosestNodeTo(startingFlag);
+        this.goalNode = GetClosestNodeTo(goalFlag);
 
         StartCoroutine(FindPath());
     }
 
+    private PathNode GetClosestNodeTo(Transform transform)
+    {
+        var position = transform.position;
+
+        PathNode closestNode = null;
+        var minDistance = Mathf.Infinity;
+
+        List<PathNode> pathNodes = new List<PathNode>(); 
+
+        switch (this.pathMode)
+        {
+            case PathMode.NormalNodes:
+                pathNodes = FindObjectsOfType<GridNode>().Cast<PathNode>().ToList();
+                break;
+            case PathMode.PoVNodes:
+                pathNodes = FindObjectsOfType<PoVNode>().Cast<PathNode>().ToList();
+                break;
+        }
+
+        foreach (var node in pathNodes)
+        {
+            var distance = Vector3.Distance(position, node.transform.position);
+
+            if (distance >= minDistance)
+                continue;
+
+            minDistance = distance;
+            closestNode = node;
+        }
+
+        return closestNode;
+    }
+
     private IEnumerator FindPath()
     {
-        yield return new WaitForSeconds(0.25f); // Let everything initialize
+        yield return new WaitForSeconds(1f); // Let everything initialize
 
         PathNode currentNode = this.startingNode;
         NodeEntry currentEntry = new NodeEntry
@@ -91,7 +110,9 @@ public class Pathfinder : MonoBehaviour
                 break;
 
 
-            //Debug.Log($"Current Node: {currentEntry.PathNode.name}");
+            //Debug.Log($"Current Node: {currentNode.name}");
+
+            currentNode.Explore();
 
             foreach (var neighboringNode in currentNode.neighboringNodes)
             {
@@ -142,10 +163,11 @@ public class Pathfinder : MonoBehaviour
                 Debug.Log($"Still processing path! Closed list now at length {closedList.Count()}");
         }
 
-        var goalEntries = closedList.Where(node => node.PathNode == goalNode);
+        var goalEntries = closedList.Where(entry => entry.PathNode == goalNode);
         if (goalEntries.Count() == 0)
         {
             Debug.Log("Goal state not reached");
+
             yield break;
         }
 
@@ -161,6 +183,6 @@ public class Pathfinder : MonoBehaviour
                 traceEntry = traceEntry.Connection;
             }
         }
-    } 
+    }
 
 }

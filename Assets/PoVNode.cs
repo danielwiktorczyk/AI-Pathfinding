@@ -39,4 +39,9 @@ public class PoVNode : PathNode
     {
         this.centerNode.GetComponent<MeshRenderer>().material = normalCenterMat;
     }
+
+    internal override void Explore()
+    {
+        Highlight();
+    }
 }

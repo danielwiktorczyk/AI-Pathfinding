@@ -67,13 +67,16 @@ public class GridNode : PathNode
         if (colliders.Length == 0)
             return false;
 
-        Debug.Log($"Obstructed {transform.name}");
-
         this.centerNode.GetComponent<MeshRenderer>().material = this.obstructedCenterMat;
 
         foreach (var node in this.neighboringNodes)
             node.neighboringNodes.Remove(this);
 
         return true;
+    }
+
+    internal override void Explore()
+    {
+        Highlight();
     }
 }
