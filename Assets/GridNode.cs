@@ -8,15 +8,11 @@ public class GridNode : PathNode
 {
     [SerializeField] private GameObject centerNode;
 
-    private static List<GameObject> obstacles;
-
-    private void Awake()
-    {
-        obstacles = GameObject.FindGameObjectsWithTag("Obstacle").ToList();
-    }
-
     public void SetNeighboringGridNodes()
     {
+        if (this.IsObstructed())
+            return; // Don't bother setting neighboring nodes
+        
         // Get all 8 directions
         for (var i = -1; i <= 1; ++i)
             for (var j = -1; j <= 1; ++j)
@@ -64,24 +60,20 @@ public class GridNode : PathNode
 
     public bool IsObstructed()
     {
-        foreach (var obstacle in obstacles)
-        {
-            var collider = obstacle.GetComponent<Collider>();
-            var closestPoint = collider.ClosestPoint(transform.position);
+        var colliders = Physics.OverlapSphere(transform.position, 0.45f);
 
-            if ((closestPoint - transform.position).magnitude <= 0.5f)
-            {
-                //Debug.Log($"Obstructed {transform.name}");
+        colliders = colliders.Where(collider => collider.CompareTag("Obstacle")).ToArray();
 
-                this.centerNode.GetComponent<MeshRenderer>().material = this.obstructedCenterMat;
+        if (colliders.Length == 0)
+            return false;
 
-                foreach (var node in this.neighboringNodes)
-                    node.neighboringNodes.Remove(this);
+        Debug.Log($"Obstructed {transform.name}");
 
-                return true;
-            }
-        }
+        this.centerNode.GetComponent<MeshRenderer>().material = this.obstructedCenterMat;
 
-        return false;
+        foreach (var node in this.neighboringNodes)
+            node.neighboringNodes.Remove(this);
+
+        return true;
     }
 }

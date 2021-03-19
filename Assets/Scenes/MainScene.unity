@@ -660,6 +660,7 @@ MonoBehaviour:
   startingNode: {fileID: 1671268359}
   goalNode: {fileID: 1762149920}
   usingEuclideanHeristic: 0
+  maxIterations: 1000
 --- !u!4 &349455839
 Transform:
   m_ObjectHideFlags: 0

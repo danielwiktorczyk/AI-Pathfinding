@@ -27,6 +27,10 @@ public class Pathfinder : MonoBehaviour
     [SerializeField] private PathNode goalNode;
 
     [SerializeField] private bool usingEuclideanHeristic;
+    
+    [SerializeField] private float maxIterations = 100000; 
+    // let's make sure we don't enter an endless loop....
+
 
     private void Start()
     {
@@ -72,7 +76,6 @@ public class Pathfinder : MonoBehaviour
             currentEntry
         };
         List<NodeEntry> closedList = new List<NodeEntry>();
-        var maxIterations = 100000; // let's make sure we don't enter an endless loop....
         var currentIteration = 0;
 
         while (openList.Count > 0 && currentIteration < maxIterations)
