@@ -659,6 +659,7 @@ MonoBehaviour:
   pathNode: 1
   startingNode: {fileID: 1671268359}
   goalNode: {fileID: 1762149920}
+  usingEuclideanHeristic: 0
 --- !u!4 &349455839
 Transform:
   m_ObjectHideFlags: 0
@@ -15808,6 +15809,10 @@ PrefabInstance:
     - target: {fileID: 6501149977317919323, guid: 858f4b4285f9bbf4db82db5c7d710070, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8454868370709757794, guid: 858f4b4285f9bbf4db82db5c7d710070, type: 3}
+      propertyPath: neighboringNodes.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 858f4b4285f9bbf4db82db5c7d710070, type: 3}
