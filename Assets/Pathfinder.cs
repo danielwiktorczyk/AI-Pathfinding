@@ -32,16 +32,36 @@ public class Pathfinder : MonoBehaviour
 
     [SerializeField] private bool usingEuclideanHeristic;
     
-    [SerializeField] private float maxIterations = 100000; 
+    [SerializeField] private float maxIterations = 100000;
+    [SerializeField] private float iterationsPerFrame = 1000;
     // let's make sure we don't enter an endless loop....
 
+    private bool hasPathFindingStarted;
+    private bool hasPathComputationEnded;
+    private float timeToWait = 1f;
+    private PathNode currentNode;
+    private NodeEntry currentEntry;
+    private List<NodeEntry> openList, closedList;
+    private int currentIteration;
 
-    private void Start()
+    private void Update()
     {
-        this.startingNode = GetClosestNodeTo(startingFlag);
-        this.goalNode = GetClosestNodeTo(goalFlag);
+        if (hasPathComputationEnded)
+            return;
+        
+        if (!hasPathFindingStarted)
+        {
+            if (timeToWait <= 0)
+            {
+                FindPath();
+                return;
+            }
+            
+            timeToWait -= Time.deltaTime;
+            return;
+        }
 
-        StartCoroutine(FindPath());
+        ContinuePathFinding();
     }
 
     private PathNode GetClosestNodeTo(Transform transform)
@@ -77,27 +97,43 @@ public class Pathfinder : MonoBehaviour
         return closestNode;
     }
 
-    private IEnumerator FindPath()
+    private void FindPath()
     {
-        yield return new WaitForSeconds(1f); // Let everything initialize
+        hasPathFindingStarted = true;
 
-        PathNode currentNode = this.startingNode;
-        NodeEntry currentEntry = new NodeEntry
+        this.startingNode = GetClosestNodeTo(startingFlag);
+        this.goalNode = GetClosestNodeTo(goalFlag);
+        
+        InitializePathfinding();
+
+        ContinuePathFinding();
+    }
+
+    private void InitializePathfinding()
+    {
+        currentNode = this.startingNode;
+        currentEntry = new NodeEntry
         {
             PathNode = currentNode,
             Connection = null,
             CostSoFar = 0,
             EstimatedTotalCost = usingEuclideanHeristic ? Vector3.Distance(goalNode.transform.position, currentNode.transform.position) : 0
         };
-
-        List<NodeEntry> openList = new List<NodeEntry>
+        openList = new List<NodeEntry>
         {
             currentEntry
         };
-        List<NodeEntry> closedList = new List<NodeEntry>();
-        var currentIteration = 0;
+        closedList = new List<NodeEntry>();
+        currentIteration = 0;
+    }
 
-        while (openList.Count > 0 && currentIteration < maxIterations)
+    private void ContinuePathFinding()
+    {
+        var currentFrameIteration = 0;
+
+        while (openList.Count > 0 
+            && currentIteration < maxIterations
+            && currentFrameIteration < iterationsPerFrame)
         {
             closedList.Add(currentEntry);
             closedList = closedList.Distinct().ToList();
@@ -107,8 +143,10 @@ public class Pathfinder : MonoBehaviour
             currentNode = currentEntry.PathNode;
 
             if (usingEuclideanHeristic && currentNode == goalNode)
+            {
+                closedList.Add(currentEntry);
                 break;
-
+            }
 
             //Debug.Log($"Current Node: {currentNode.name}");
 
@@ -130,7 +168,7 @@ public class Pathfinder : MonoBehaviour
 
                 //Debug.Log($"Neighbor: {neighboringEntry.PathNode.name}");
 
-                var existingEntryInOpenList = closedList.Find(entry => entry.PathNode == neighboringNode);
+                var existingEntryInOpenList = openList.Find(entry => entry.PathNode == neighboringNode);
                 if (existingEntryInOpenList != null)
                 {
                     //Debug.Log($"Exists in open: {existingEntryInOpenList.PathNode.name}");
@@ -157,18 +195,28 @@ public class Pathfinder : MonoBehaviour
             openList = openList.Distinct().ToList();
             openList = openList.OrderBy(node => node.EstimatedTotalCost).ToList();
 
-            ++currentIteration;
+            //Debug.Log(openList.Count());
 
-            if (currentIteration % 1000 == 0)
-                Debug.Log($"Still processing path! Closed list now at length {closedList.Count()}");
+            ++currentIteration;
+            ++currentFrameIteration;
         }
+
+        if (usingEuclideanHeristic && currentNode == goalNode
+            || openList.Count() == 0 
+            || currentIteration >= maxIterations)
+            HandlePathResult();
+    }
+
+    private void HandlePathResult()
+    {
+        hasPathComputationEnded = true;
 
         var goalEntries = closedList.Where(entry => entry.PathNode == goalNode);
         if (goalEntries.Count() == 0)
         {
             Debug.Log("Goal state not reached");
 
-            yield break;
+            return;
         }
 
         var goalEntry = goalEntries.First();
@@ -184,5 +232,4 @@ public class Pathfinder : MonoBehaviour
             }
         }
     }
-
 }

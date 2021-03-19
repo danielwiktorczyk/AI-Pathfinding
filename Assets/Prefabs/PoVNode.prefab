@@ -240,4 +240,7 @@ MonoBehaviour:
   lineMat: {fileID: 2100000, guid: 3fb4fb12cf5032043822eb9d9d7b2791, type: 2}
   normalCenterMat: {fileID: 2100000, guid: 7402d6fdd5dc0244b82bd94c471e9ea9, type: 2}
   highlightedCenterMat: {fileID: 2100000, guid: e0ef315ca97570f46a8af5a0591b70ba, type: 2}
+  obstructedCenterMat: {fileID: 0}
+  exploredMaterial: {fileID: 2100000, guid: f6ea86391576c2a4eb956127cb478a25, type: 2}
   centerNode: {fileID: 2390946901232265505}
+  tile: {fileID: 2331883655039562930}

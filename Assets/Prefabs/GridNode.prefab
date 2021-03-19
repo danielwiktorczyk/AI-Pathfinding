@@ -146,7 +146,9 @@ MonoBehaviour:
   normalCenterMat: {fileID: 2100000, guid: 7402d6fdd5dc0244b82bd94c471e9ea9, type: 2}
   highlightedCenterMat: {fileID: 2100000, guid: e0ef315ca97570f46a8af5a0591b70ba, type: 2}
   obstructedCenterMat: {fileID: 2100000, guid: a5c1bd1e0fe9d8945a8c288d5f32f923, type: 2}
+  exploredMaterial: {fileID: 2100000, guid: f6ea86391576c2a4eb956127cb478a25, type: 2}
   centerNode: {fileID: 1253161793601187500}
+  tile: {fileID: 8394331883133448891}
 --- !u!65 &2434999614052645274
 BoxCollider:
   m_ObjectHideFlags: 0

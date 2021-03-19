@@ -7,6 +7,7 @@ using UnityEngine;
 public class GridNode : PathNode
 {
     [SerializeField] private GameObject centerNode;
+    [SerializeField] private GameObject tile;
 
     public void SetNeighboringGridNodes()
     {
@@ -51,6 +52,7 @@ public class GridNode : PathNode
     public override void Highlight()
     {
         this.centerNode.GetComponent<MeshRenderer>().material = this.highlightedCenterMat;
+        this.tile.GetComponent<MeshRenderer>().material = this.highlightedCenterMat;
     }
 
     public override void RevertHighlighting()
@@ -77,6 +79,6 @@ public class GridNode : PathNode
 
     internal override void Explore()
     {
-        Highlight();
+        this.tile.GetComponent<MeshRenderer>().material = this.exploredMaterial;
     }
 }

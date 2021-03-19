@@ -7,6 +7,7 @@ using UnityEngine;
 public class PoVNode : PathNode
 {
     [SerializeField] private GameObject centerNode;
+    [SerializeField] private GameObject tile;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +34,7 @@ public class PoVNode : PathNode
     public override void Highlight()
     {
         this.centerNode.GetComponent<MeshRenderer>().material = highlightedCenterMat;
+        this.tile.GetComponent<MeshRenderer>().material = this.highlightedCenterMat;
     }
 
     public override void RevertHighlighting()
@@ -42,6 +44,6 @@ public class PoVNode : PathNode
 
     internal override void Explore()
     {
-        Highlight();
+        this.tile.GetComponent<MeshRenderer>().material = this.exploredMaterial;
     }
 }
