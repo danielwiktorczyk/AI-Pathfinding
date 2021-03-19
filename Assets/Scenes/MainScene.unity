@@ -661,7 +661,7 @@ MonoBehaviour:
   goalFlag: {fileID: 447969397482345496}
   usingEuclideanHeristic: 1
   maxIterations: 100000
-  iterationsPerFrame: 11.04
+  iterationsPerFrame: 30
 --- !u!4 &349455839
 Transform:
   m_ObjectHideFlags: 0
@@ -15622,7 +15622,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8458227785412648477, guid: 1fed07ff6f3b2c848b33a3f441443edb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.68
+      value: -29.06
       objectReference: {fileID: 0}
     - target: {fileID: 8458227785412648477, guid: 1fed07ff6f3b2c848b33a3f441443edb, type: 3}
       propertyPath: m_LocalPosition.y
@@ -15630,7 +15630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8458227785412648477, guid: 1fed07ff6f3b2c848b33a3f441443edb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.28
+      value: -18.39
       objectReference: {fileID: 0}
     - target: {fileID: 8458227785412648477, guid: 1fed07ff6f3b2c848b33a3f441443edb, type: 3}
       propertyPath: m_LocalRotation.w

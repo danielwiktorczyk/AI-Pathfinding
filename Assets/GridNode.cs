@@ -29,8 +29,9 @@ public class GridNode : PathNode
         
         var colliders = Physics.OverlapSphere(
             neighboringGridNodePosition,
-            0.01f,
-            LayerMask.NameToLayer("GridNode"));
+            0.1f);
+
+        colliders = colliders.Where(collider => collider.GetComponent<GridNode>() != null).ToArray();
 
         if (colliders.Length == 0)
             return;
@@ -62,13 +63,14 @@ public class GridNode : PathNode
 
     public bool IsObstructed()
     {
-        var colliders = Physics.OverlapSphere(transform.position, 0.45f);
+        var colliders = Physics.OverlapSphere(transform.position, 0.25f);
 
         colliders = colliders.Where(collider => collider.CompareTag("Obstacle")).ToArray();
 
         if (colliders.Length == 0)
             return false;
 
+        Debug.Log($"{transform.name} is obstructed");
         this.centerNode.GetComponent<MeshRenderer>().material = this.obstructedCenterMat;
 
         foreach (var node in this.neighboringNodes)
