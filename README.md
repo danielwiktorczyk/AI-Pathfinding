@@ -1,17 +1,24 @@
 AI Pathfinding
+Daniel Wiktorczyk 40060894 
 
-I would like to continue this project, and may update the project at
+
+Please find the latest code available at
 https://github.com/danielwiktorczyk/AI-Pathfinding
-, my repo which I shall make public after the submission date. 
 
-That being said, the project is NOT finished in this current state. 
+Instructions and Special Features
+Use the Pathfinder game object in the main scene to set parameters:
+• Normal (grid) nodes or PoV node path finding
+• Set the StartFlag and GoalFlag gameobjects’ locations in the scene to set where the path starts and ends from
+• The “Using Euclidean Heristic” to set the heuristic accordingly
+	o FALSE to use the null heuristic
+	o TRUE to use the Euclidean
+• The max iterations to avoid infinite loop bugs 
+• EXTRA FEATURE: Lower or increase the iterations per frame to achieve slower or faster animation of the path. 
+	o choosing 1 will force only 1 iteration of the pathfinding algo per frame; 
+	o choosing 1000 will probably not animate it very smoothly
+	
+Note that there is no player in the scene, and that I have not implemented clusters.
 
+Please refer to the write up PDF for the fill screen shots. 
 
-I have completed the requirements for R1, and have the pathfinding working for the PoV nodes. 
-
-There's some issues with the grid tiles when pathfinding, and my Astar isn't running very well either. 
-
-Did not have time to add in character movement sadly ;(
-
-
-Hope that helps! Thank you! 
+Thank you!!
